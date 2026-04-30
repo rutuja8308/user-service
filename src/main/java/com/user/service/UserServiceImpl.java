@@ -9,24 +9,25 @@ import com.user.entity.User;
 import com.user.repository.UserRepository;
 
 @Service
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl implements UserService 
+{
 	@Autowired
 	private UserRepository userRepository;
 
 	@Override
-	public User saveUser(User user) {
+	public User saveUser(User user) 
+	{
 		return userRepository.save(user);
 	}
 
 	@Override
-	public User searchUser(Integer id) {
-		// TODO Auto-generated method stub
+	public User searchUser(Integer id) 
+	{
 		return userRepository.findById(id).orElse(null);
 	}
 
 	@Override
 	public String deleteUser(Integer id) {
-		// TODO Auto-generated method stub
 		 userRepository.deleteById(id);
 		 return "Deleted Successfully";
 	}
@@ -45,9 +46,7 @@ public class UserServiceImpl implements UserService {
 		users.setEmail(user.getEmail());
 		users.setPassword(user.getPassword());
 		users.setCity(user.getCity());
-
-  	userRepository.save(user);
+		userRepository.save(user);
 		return users;
 	}
-
 }
