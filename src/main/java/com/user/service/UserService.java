@@ -1,15 +1,16 @@
 package com.user.service;
 
 import java.util.List;
+import java.util.UUID;
 
 import com.user.entity.User;
 
 public interface UserService 
 {
 	User saveUser(User user);
-	User searchUser(Integer id);
+	User searchUser(String id);
 	List<User> findAllUser();
-	User updateUser(User user, Integer id);
-	String deleteUser(Integer id);
+	User updateUser(User user, String id);
+	String deleteUser(String id);
 	
 }

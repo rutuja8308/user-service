@@ -1,6 +1,6 @@
 package com.user.controller;
-
 import java.util.List;
+import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,7 +41,7 @@ public class UserController
     }
     
     @GetMapping("/search/{id}")
-    public User searchUser(@PathVariable Integer id)
+    public User searchUser(@PathVariable String id)
     {
     	log.info("Search User method UserController {}", id);
 		return userService.searchUser(id); 
@@ -55,14 +55,14 @@ public class UserController
     }
     
     @DeleteMapping("/delete/{id}")
-    public String deleteUser (@PathVariable Integer id)
+    public String deleteUser (@PathVariable String id)
     {
     	log.info("User Delete method UserController {}", id);
 		return userService.deleteUser(id); 
 	}
     
     @PutMapping("/update/{id}")
-    public User updateUser(@RequestBody User user, @PathVariable Integer id)
+    public User updateUser(@RequestBody User user, @PathVariable String id)
     {
     	log.info("User update method UserController {}", user);
     	return userService.updateUser(user, id);
