@@ -9,19 +9,22 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.annotations.UuidGenerator;
 import org.hibernate.type.SqlTypes;
 
 @Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class Address 
 {
 	@Id
-    @GeneratedValue(strategy = GenerationType.UUID)
+	@UuidGenerator
 	@JdbcTypeCode(SqlTypes.VARCHAR)
 	private String id;
 	

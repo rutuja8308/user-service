@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.user.dto.UserDTO;
 import com.user.entity.User;
 import com.user.service.UserService;
 
@@ -34,7 +35,7 @@ public class UserController
 	}
    
     @PostMapping("/save")
-    public User saveUser(@Valid @RequestBody User user)
+    public User saveUser(@Valid @RequestBody UserDTO user)
     {
     	log.info("saveUser method UserController {}", user);
     	return userService.saveUser(user);

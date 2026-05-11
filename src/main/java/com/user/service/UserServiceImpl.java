@@ -5,6 +5,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.user.dto.AddressDTO;
+import com.user.dto.UserDTO;
 import com.user.entity.Address;
 import com.user.entity.User;
 import com.user.exception.ResourceNotFoundException;
@@ -19,16 +22,11 @@ public class UserServiceImpl implements UserService
 	private UserRepository userRepository;
 
 	@Override
-	public User saveUser(User user) 
+	public User saveUser(UserDTO user) 
 	{
 		log.info("User details saved successfully {}", user);
 		
-		for(Address address : user.getAddress())
-		{
-			address.setUser(user);
-		}
-		
-		return userRepository.save(user);
+		return userRepository.save(user.toUser());
 	}
 
 	@Override

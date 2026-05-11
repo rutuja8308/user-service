@@ -17,6 +17,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -24,10 +25,11 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class User 
 {
 	@Id
-	@GeneratedValue(strategy = GenerationType.UUID)
+	@UuidGenerator
 	private String id;
 	
 	@Size(min = 6)
@@ -38,8 +40,6 @@ public class User
 	
 	@Size(min = 6 ,  message = "Invalid password")
 	private String password;
-	
-	
 	
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
 	private List<Address> address;
