@@ -1,11 +1,10 @@
 package com.user.controller;
 import java.util.List;
-import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.annotation.Validated;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,12 +27,16 @@ public class UserController
 	@Autowired
 	private UserService userService;
 	
-    @GetMapping
+	@Value("${my.name}")
+	private String name;
+	
+    @GetMapping("/getFromProp")
 	public String home() 
 	{
-		return "home controller";	
+    	log.info("Read value from Appliation.Properties file : {} " + name);
+		return "home controller" + name;	
 	}
-   
+    
     @PostMapping("/save")
     public User saveUser(@Valid @RequestBody UserDTO user)
     {
