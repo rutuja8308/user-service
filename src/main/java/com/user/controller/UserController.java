@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.user.dto.UserDTO;
 import com.user.entity.User;
 import com.user.service.UserService;
+import com.user.validationMessages.ValidationMessages;
 
 import jakarta.validation.Valid;
 
@@ -32,8 +33,8 @@ public class UserController
 	
     @GetMapping("/getFromProp")
 	public String home() 
-	{
-    	log.info("Read value from Appliation.Properties file : {} " + name);
+	{	
+    	log.info(ValidationMessages.READ_VALUE_FROM_FILE);	
 		return "home controller" + name;	
 	}
     
