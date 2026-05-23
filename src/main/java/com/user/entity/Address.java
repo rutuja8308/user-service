@@ -12,6 +12,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
+
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.annotations.UuidGenerator;
 import org.hibernate.type.SqlTypes;
@@ -41,5 +43,6 @@ public class Address
 	@ManyToOne
 	@JoinColumn(name = "user_id")
 	@JsonIgnore
+	@ToString.Exclude
 	private User user;
 }

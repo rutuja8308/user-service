@@ -1,6 +1,7 @@
 package com.user.dto;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.user.entity.Address;
 import com.user.entity.User;
@@ -38,14 +39,12 @@ public class UserDTO {
 	private String phone;
 
 	public User toUser() {
-		User user = User.builder().name(name).email(emailId).password(password).phone(phone).build();
+		User user = User.builder().name(name).email(emailId).password(password).phone(phone).isDeleted(Boolean.FALSE).build();
 
 		List<Address> addressList = address.stream().map(a ->
 
 		Address.builder().blockNo(a.getBlockNo()).building(a.getBuilding()).landmark(a.getLandmark()).city(a.getCity())
-				.pin(a.getPin()).user(user).build()
-
-		).toList();
+				.pin(a.getPin()).user(user).build()).collect(Collectors.toList());
 
 		user.setAddress(addressList);
 

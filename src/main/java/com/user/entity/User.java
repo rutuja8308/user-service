@@ -5,6 +5,8 @@ import java.util.UUID;
 
 import org.hibernate.annotations.UuidGenerator;
 
+import com.user.dto.AddressDTO;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -20,6 +22,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Entity
 @Data
@@ -42,9 +45,13 @@ public class User
 	private String password;
 	
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+	@ToString.Exclude
 	private List<Address> address;
 	
 	@Pattern(regexp = "^[0-9]{10}$", message = "Phone number must be 10 digits")
 	private String phone;
+	
+	@Column(name = "is_deleted")
+    private Boolean isDeleted = false;
 
 }

@@ -1,14 +1,12 @@
 package com.user.service;
 
+import com.user.exception.GlobalExceptionHandler;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import com.user.dto.AddressDTO;
 import com.user.dto.UserDTO;
-import com.user.entity.Address;
 import com.user.entity.User;
 import com.user.exception.ResourceNotFoundException;
 import com.user.repository.UserRepository;
@@ -16,7 +14,8 @@ import com.user.repository.UserRepository;
 @Service
 public class UserServiceImpl implements UserService 
 {
-	private static final Logger log = LoggerFactory.getLogger(UserServiceImpl.class);
+	
+private static final Logger log = LoggerFactory.getLogger(UserServiceImpl.class);
 	
 	@Autowired
 	private UserRepository userRepository;
@@ -26,6 +25,10 @@ public class UserServiceImpl implements UserService
 	{
 		log.info("User details saved successfully {}", user);
 		
+	    User savedUser = user.toUser();
+
+		savedUser.setIsDeleted(Boolean.FALSE);
+	    
 		return userRepository.save(user.toUser());
 	}
 
@@ -33,14 +36,24 @@ public class UserServiceImpl implements UserService
 	public User searchUser(String id) 
 	{
 		log.info("User found in UserServiceImpl {}", id);
-		return userRepository.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + id));
+		//return userRepository.findById(id)
+			return userRepository.findByIsDeletedFalse();
+				//.orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + id));
 	}
 
 	@Override
 	public String deleteUser(String id) 
 	{
-		 userRepository.deleteById(id);
+		 User user = userRepository.findById(id)
+		            .orElseThrow(() -> new ResourceNotFoundException("User not found with id : " + id));
+		 
+		 log.info("id is checking : {}", user);
+		 
+		 user.setIsDeleted(Boolean.TRUE);
+		 
+		 userRepository.save(user);
+		 
+		// userRepository.deleteById(id);
 		 log.info("User deleted successfully UserServiceImpl {}", id);
 		 return "Deleted Successfully";
 	}
@@ -53,22 +66,26 @@ public class UserServiceImpl implements UserService
 	}
 
 	@Override
-	public User updateUser(User user, String id) {
+	public User updateUser(UserDTO userDto, String id) {
 		User existingUser = userRepository.findById(id).orElse(null);
 		
 		if (existingUser == null) {
 	        log.warn("User not found with id: {}", id);
 	        return null;
 	    }
+		
+	    User updatedData = userDto.toUser();
 
-		existingUser.setName(user.getName());
-		existingUser.setEmail(user.getEmail());
-		existingUser.setPassword(user.getPassword());
-		existingUser.setAddress(user.getAddress());
+		existingUser.setName(userDto.getName());
+		existingUser.setEmail(userDto.getEmailId());
+		existingUser.setPassword(userDto.getPassword());
+		
+		existingUser.setAddress(updatedData.getAddress());
+		
+	    existingUser.getAddress().forEach(a -> a.setUser(existingUser));
+		
 	    User updatedUser = userRepository.save(existingUser);
 		log.info("User updated successfully UserServiceImpl {}", updatedUser);
 		return updatedUser;
 	}
-
-	
 }

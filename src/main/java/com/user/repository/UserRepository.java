@@ -8,4 +8,6 @@ import com.user.entity.User;
 
 public interface UserRepository extends JpaRepository<User, String> {
 
+	User findByIsDeletedFalse();
+
 }

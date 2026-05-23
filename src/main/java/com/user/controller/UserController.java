@@ -52,6 +52,8 @@ public class UserController
 		return userService.searchUser(id); 
 	}
     
+    // create product // search product // update
+    
     @GetMapping("/findAll")
     public List<User> findAllUser()
     {
@@ -67,7 +69,7 @@ public class UserController
 	}
     
     @PutMapping("/update/{id}")
-    public User updateUser(@RequestBody User user, @PathVariable String id)
+    public User updateUser(@RequestBody UserDTO user, @PathVariable String id)
     {
     	log.info("User update method UserController {}", user);
     	return userService.updateUser(user, id);

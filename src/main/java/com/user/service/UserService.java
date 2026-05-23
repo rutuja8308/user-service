@@ -11,7 +11,7 @@ public interface UserService
 	User saveUser(UserDTO user);
 	User searchUser(String id);
 	List<User> findAllUser();
-	User updateUser(User user, String id);
+	User updateUser(UserDTO user, String id);
 	String deleteUser(String id);
 	
 }
