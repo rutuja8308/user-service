@@ -60,15 +60,16 @@ stages {
         }
     }
 
-    stage('Start Tomcat') {
-        steps {
-
-            bat '''
-            cd /d "%TOMCAT_HOME%\\bin"
-            start "" startup.bat
-            '''
-
-        }
+   	stage('Start Tomcat') {
+    steps {
+        bat '''
+        cd /d "%TOMCAT_HOME%\\bin"
+        call startup.bat
+        timeout /t 10
+        netstat -ano | findstr :8080
+        '''
+    }
+}
     }
 }
 
