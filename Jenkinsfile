@@ -9,12 +9,6 @@ pipeline {
 
     stages {
 
-        stage('Clone') {
-            steps {
-                git 'https://github.com/rutuja8308/user-service.git'
-            }
-        }
-
         stage('Build') {
             steps {
                 bat 'mvn clean compile'
