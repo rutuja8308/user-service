@@ -31,27 +31,42 @@ stages {
         steps {
 
             bat '''
-            cd /d "%TOMCAT_HOME%\\bin" shutdown.bat 
+            cd /d "%TOMCAT_HOME%\\bin"
+            shutdown.bat
             '''
+
         }
     }
 
-    stage('Delete Old WAR') { 
-		steps {
-			 bat ''' if exist "%TOMCAT_HOME%\\webapps\\%WAR_FILE%" ( del /F /Q "%TOMCAT_HOME%\\webapps\\%WAR_FILE%" ) '''
-			 } 
-	}
+    stage('Delete Old WAR') {
+        steps {
 
-    stage('Deploy WAR') { 
-		steps { 
-			bat ''' copy /Y "target\\%WAR_FILE%" "%TOMCAT_HOME%\\webapps\\%WAR_FILE%" '''
-			} 
-	}
+            bat '''
+            if exist "%TOMCAT_HOME%\\webapps\\%WAR_FILE%" (
+                del /F /Q "%TOMCAT_HOME%\\webapps\\%WAR_FILE%"
+            )
+            '''
+
+        }
+    }
+
+    stage('Deploy WAR') {
+        steps {
+
+            bat '''
+            copy /Y "target\\%WAR_FILE%" "%TOMCAT_HOME%\\webapps\\%WAR_FILE%"
+            '''
+
+        }
+    }
 
     stage('Start Tomcat') {
         steps {
 
-            bat ''' cd /d "%TOMCAT_HOME%\\bin" startup.bat '''
+            bat '''
+            cd /d "%TOMCAT_HOME%\\bin"
+            startup.bat
+            '''
 
         }
     }
