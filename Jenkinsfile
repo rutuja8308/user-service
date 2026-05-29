@@ -1,10 +1,11 @@
+```groovy
 pipeline {
 
     agent any
 
     tools {
-        jdk 'JDK17'
-        maven 'Maven3'
+        jdk 'JDK21'
+        maven 'MAVEN'
     }
 
     stages {
@@ -17,26 +18,27 @@ pipeline {
 
         stage('Build') {
             steps {
-                sh 'mvn clean compile'
+                bat 'mvn clean compile'
             }
         }
 
         stage('Test') {
             steps {
-                sh 'mvn test'
+                bat 'mvn test'
             }
         }
 
         stage('Package') {
             steps {
-                sh 'mvn clean package'
+                bat 'mvn clean package'
             }
         }
 
         stage('Run Application') {
             steps {
-                sh 'nohup java -jar target/user-service-0.0.1-SNAPSHOT.jar &'
+                bat 'java -jar target\\user-service-0.0.1-SNAPSHOT.jar'
             }
         }
     }
 }
+```
