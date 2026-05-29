@@ -24,12 +24,18 @@ pipeline {
         }
 
         stage('Stop Existing Tomcat') {
-            steps {
-                bat '''
-                net stop Tomcat10 || echo Tomcat already stopped
-                '''
-            }
-        }
+    steps {
+        bat '''
+        sc query Tomcat10 | find "RUNNING" >nul
+        if %errorlevel%==0 (
+            net stop Tomcat10
+        ) else (
+            echo Tomcat already stopped
+        )
+        exit /b 0
+        '''
+    }
+}
 
         stage('Delete Old WAR') {
             steps {
