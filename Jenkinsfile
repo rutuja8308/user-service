@@ -26,7 +26,7 @@ pipeline {
         stage('Stop Existing Tomcat') {
             steps {
                 bat '''
-                taskkill /F /IM java.exe /T || echo No running Tomcat
+                net stop Tomcat10 || echo Tomcat already stopped
                 '''
             }
         }
