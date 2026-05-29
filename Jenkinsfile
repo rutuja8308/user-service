@@ -19,51 +19,24 @@ pipeline {
 
         stage('Build WAR') {
             steps {
-                bat 'mvn clean install'
-            }
-        }
-
-        stage('Stop Existing Tomcat') {
-    steps {
-        bat '''
-        sc query Tomcat10 | find "RUNNING" >nul
-        if %errorlevel%==0 (
-            net stop Tomcat10
-        ) else (
-            echo Tomcat already stopped
-        )
-        exit /b 0
-        '''
-    }
-}
-
-        stage('Delete Old WAR') {
-            steps {
-                bat '''
-                if exist "%TOMCAT_HOME%\\webapps\\%WAR_FILE%" (
-                    del /F /Q "%TOMCAT_HOME%\\webapps\\%WAR_FILE%"
-                )
-                '''
+                bat 'mvn clean clean package'
             }
         }
 
         stage('Deploy WAR') {
             steps {
                 bat '''
+                echo Deploying WAR...
+
                 copy /Y "target\\%WAR_FILE%" "%TOMCAT_HOME%\\webapps\\%WAR_FILE%"
                 '''
             }
         }
 
-        stage('Start Tomcat') {
+        stage('Verify Deployment') {
             steps {
                 bat '''
-                cd /d "%TOMCAT_HOME%\\bin"
-
-                start "" "%TOMCAT_HOME%\\bin\\catalina.bat" run
-
-                ping 127.0.0.1 -n 12 > nul
-
+                timeout /t 10 > nul
                 netstat -ano | findstr ":8080"
                 '''
             }
@@ -72,11 +45,11 @@ pipeline {
 
     post {
         success {
-            echo '🚀 Tomcat Deployment Successful'
+            echo '🚀 Deployment Successful (Tomcat managed manually/service)'
         }
 
         failure {
-            echo '❌ Tomcat Deployment Failed'
+            echo '❌ Deployment Failed'
         }
     }
 }
