@@ -65,8 +65,11 @@ stages {
         bat '''
         cd /d "%TOMCAT_HOME%\\bin"
         cmd /c startup.bat
-        timeout /t 10
-        netstat -ano | findstr :8080
+
+        REM simple safe wait (NO timeout command)
+        ping 127.0.0.1 -n 10 > nul
+
+        netstat -ano | findstr ":8080"
         '''
     }
 }
