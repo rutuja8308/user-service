@@ -12,7 +12,7 @@
 	<groupId>com.user</groupId>
 	<artifactId>user-service</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>jar</packaging>
+	<packaging>war</packaging>
 	<name>user-service</name>
 	<description />
 	<url />
@@ -100,6 +100,7 @@
 	</dependencies>
 
 	<build>
+	<finalName>user-service</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
