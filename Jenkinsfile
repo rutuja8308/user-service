@@ -1,92 +1,76 @@
 pipeline {
-agent any
+    agent any
 
-tools {
-    jdk 'JDK21'
-    maven 'MAVEN'
-}
+    tools {
+        jdk 'JDK21'
+        maven 'MAVEN'
+    }
 
-environment {
+    environment {
+        TOMCAT_HOME = 'C:\\Program Files\\Apache Software Foundation\\Tomcat 10.1'
+        WAR_FILE = 'user-service.war'
+    }
 
-    TOMCAT_HOME = 'C:\\Program Files\\Apache Software Foundation\\Tomcat 10.1'
-    WAR_FILE = 'user-service.war'
+    options {
+        timestamps()
+    }
 
-}
+    stages {
 
-options {
-    timestamps()
-}
+        stage('Build WAR') {
+            steps {
+                bat 'mvn clean install'
+            }
+        }
 
-stages {
+        stage('Stop Existing Tomcat') {
+            steps {
+                bat '''
+                taskkill /F /IM java.exe /T || echo No running Tomcat
+                '''
+            }
+        }
 
-    stage('Build WAR') {
-        steps {
+        stage('Delete Old WAR') {
+            steps {
+                bat '''
+                if exist "%TOMCAT_HOME%\\webapps\\%WAR_FILE%" (
+                    del /F /Q "%TOMCAT_HOME%\\webapps\\%WAR_FILE%"
+                )
+                '''
+            }
+        }
 
-            bat 'mvn clean install'
+        stage('Deploy WAR') {
+            steps {
+                bat '''
+                copy /Y "target\\%WAR_FILE%" "%TOMCAT_HOME%\\webapps\\%WAR_FILE%"
+                '''
+            }
+        }
 
+        stage('Start Tomcat') {
+            steps {
+                bat '''
+                cd /d "%TOMCAT_HOME%\\bin"
+
+                start "" "%TOMCAT_HOME%\\bin\\catalina.bat" run
+
+                ping 127.0.0.1 -n 12 > nul
+
+                netstat -ano | findstr ":8080"
+                '''
+            }
         }
     }
 
-    stage('Stop Tomcat') {
-        steps {
+    post {
+        success {
+            echo '🚀 Tomcat Deployment Successful'
+        }
 
-            bat '''
-            cd /d "%TOMCAT_HOME%\\bin"
-            shutdown.bat || exit /b 0
-            '''
-
+        failure {
+            echo '❌ Tomcat Deployment Failed'
         }
     }
-
-    stage('Delete Old WAR') {
-        steps {
-
-            bat '''
-            if exist "%TOMCAT_HOME%\\webapps\\%WAR_FILE%" (
-                del /F /Q "%TOMCAT_HOME%\\webapps\\%WAR_FILE%"
-            )
-            '''
-
-        }
-    }
-
-    stage('Deploy WAR') {
-        steps {
-
-            bat '''
-            copy /Y "target\\%WAR_FILE%" "%TOMCAT_HOME%\\webapps\\%WAR_FILE%"
-            '''
-
-        }
-    }
-
-   	stage('Start Tomcat') {
-    steps {
-        bat '''
-        cd /d "%TOMCAT_HOME%\\bin"
-        cmd /c startup.bat
-
-        REM simple safe wait (NO timeout command)
-        ping 127.0.0.1 -n 10 > nul
-
-        netstat -ano | findstr ":8080"
-        '''
-    }
-}
-}
-
-post {
-
-    success {
-
-        echo 'Tomcat Deployment Successful'
-
-    }
-
-    failure {
-
-        echo 'Tomcat Deployment Failed'
-
-    }
-}
 }
