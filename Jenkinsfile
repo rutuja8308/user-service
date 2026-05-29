@@ -32,7 +32,7 @@ stages {
 
             bat '''
             cd /d "%TOMCAT_HOME%\\bin"
-            shutdown.bat
+            shutdown.bat || exit /b 0
             '''
 
         }
@@ -65,7 +65,7 @@ stages {
 
             bat '''
             cd /d "%TOMCAT_HOME%\\bin"
-            start startup.bat
+            start "" startup.bat
             '''
 
         }
