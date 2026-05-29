@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.user.entity.Address;
+import com.user.entity.Role;
 import com.user.entity.User;
 
 import jakarta.validation.Valid;
@@ -30,6 +31,10 @@ public class UserDTO {
 	@NotBlank(message = "Password is required")
 	private String password;
 	
+	private String username;
+	
+	private String role;
+	
 	@Valid
 	private List<AddressDTO> address;
 	
@@ -39,7 +44,7 @@ public class UserDTO {
 	private String phone;
 
 	public User toUser() {
-		User user = User.builder().name(name).email(emailId).password(password).phone(phone).isDeleted(Boolean.FALSE).build();
+		User user = User.builder().name(name).username(username).role(Role.valueOf(role.toUpperCase())).email(emailId).password(password).phone(phone).isDeleted(Boolean.FALSE).build();
 
 		List<Address> addressList = address.stream().map(a ->
 

@@ -10,10 +10,13 @@ import com.user.dto.AddressDTO;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -29,11 +32,14 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@Table(name = "users")
 public class User 
 {
 	@Id
 	@UuidGenerator
 	private String id;
+	
+	private String username;
 	
 	@Size(min = 6)
 	private String name;
@@ -50,6 +56,9 @@ public class User
 	
 	@Pattern(regexp = "^[0-9]{10}$", message = "Phone number must be 10 digits")
 	private String phone;
+	
+	@Enumerated(EnumType.STRING)
+	private Role role;
 	
 	@Column(name = "is_deleted")
     private Boolean isDeleted = false;
