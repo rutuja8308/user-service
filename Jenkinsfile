@@ -65,7 +65,7 @@ stages {
 
             bat '''
             cd /d "%TOMCAT_HOME%\\bin"
-            startup.bat
+            start startup.bat
             '''
 
         }
