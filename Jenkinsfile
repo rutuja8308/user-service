@@ -64,12 +64,12 @@ stages {
     steps {
         bat '''
         cd /d "%TOMCAT_HOME%\\bin"
-        call startup.bat
+        cmd /c startup.bat
         timeout /t 10
         netstat -ano | findstr :8080
         '''
     }
-    }
+}
 }
 
 post {
