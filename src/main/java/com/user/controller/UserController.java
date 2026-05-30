@@ -28,10 +28,9 @@ public class UserController
 	
 	private UserService userService;
 	
-	public UserController(UserService userService, String name) {
+	public UserController(UserService userService) {
 		super();
 		this.userService = userService;
-		this.name = name;
 	}
 
 	@Value("${my.name}")
