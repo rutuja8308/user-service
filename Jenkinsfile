@@ -28,6 +28,14 @@ pipeline {
                 bat 'mvn test'
             }
         }
+        
+        stage('SonarQube Analysis') {
+   		 steps {
+        withSonarQubeEnv('SonarQube') {
+            bat 'mvn clean verify sonar:sonar'
+        }
+    }
+}
 
         stage('Deploy WAR') {
             steps {
