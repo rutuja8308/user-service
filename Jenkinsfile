@@ -29,13 +29,28 @@ pipeline {
             }
         }
         
+        // ✅ ADD THIS STAGE
+        stage('SonarQube Analysis') {
+            steps {
+                withSonarQubeEnv('SonarQube') {   // <-- your Jenkins SonarQube name
+                    bat '''
+                        mvn sonar:sonar ^
+                        -Dsonar.projectKey=user-service ^
+                        -Dsonar.projectName=user-service
+                    '''
+                }
+            }
+        }
+        
+        // keep this AFTER sonar analysis
         stage('Quality Gate') {
-    	steps {
-        timeout(time: 5, unit: 'MINUTES') {
-            waitForQualityGate abortPipeline: true
-        	}
-    		}
-		}
+            steps {
+                timeout(time: 5, unit: 'MINUTES') {
+                    waitForQualityGate abortPipeline: true
+                }
+            }
+        }
+
 
         stage('Deploy WAR') {
             steps {
