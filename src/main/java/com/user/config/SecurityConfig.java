@@ -1,6 +1,5 @@
 package com.user.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -17,8 +16,16 @@ import com.user.filter.JwtFilter;
 @Configuration
 public class SecurityConfig {
 
-	@Autowired
 	private JwtFilter jwtFilter;
+	
+	private static final String ROLE_ADMIN = "ADMIN";
+	private static final String ROLE_USER = "USER";
+	private static final String ROLE_MANAGER = "MANAGER";
+	
+	public SecurityConfig(JwtFilter jwtFilter) {
+		super();
+		this.jwtFilter = jwtFilter;
+	}
 
 	@Bean
 	public PasswordEncoder passwordEncoder() {
@@ -46,16 +53,16 @@ public class SecurityConfig {
 						.requestMatchers("/users/save").permitAll()
 
 						.requestMatchers("/users/findAll")
-						.hasRole("ADMIN")
+						.hasRole(ROLE_ADMIN)
 
 						.requestMatchers("/users/delete/**")
-						.hasRole("ADMIN")
+						.hasRole(ROLE_ADMIN)
 
 						.requestMatchers("/users/update/**")
-						.hasAnyRole("ADMIN", "MANAGER")
+						.hasAnyRole(ROLE_ADMIN, ROLE_MANAGER)
 
 						.requestMatchers("/users/search/**")
-						.hasAnyRole("ADMIN", "USER", "MANAGER")
+						.hasAnyRole(ROLE_ADMIN, ROLE_USER, ROLE_MANAGER)
 
 						.requestMatchers("/users/getFromProp")
 						.authenticated()

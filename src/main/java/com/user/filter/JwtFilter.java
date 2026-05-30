@@ -2,26 +2,32 @@ package com.user.filter;
 
 import java.io.IOException;
 
-import jakarta.servlet.*;
-import jakarta.servlet.http.*;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.*;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.user.utility.JwtUtil;
 
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+
 @Component
 public class JwtFilter extends OncePerRequestFilter {
 
-	@Autowired
 	private JwtUtil jwtUtil;
 
-	@Autowired
 	private UserDetailsService service;
+	
+	public JwtFilter(JwtUtil jwtUtil, UserDetailsService service) {
+		super();
+		this.jwtUtil = jwtUtil;
+		this.service = service;
+	}
 
 	@Override
 	protected void doFilterInternal(

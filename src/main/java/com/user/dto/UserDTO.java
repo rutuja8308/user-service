@@ -1,7 +1,6 @@
 package com.user.dto;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import com.user.entity.Address;
 import com.user.entity.Role;
@@ -39,8 +38,7 @@ public class UserDTO {
 	private List<AddressDTO> address;
 	
 	@NotBlank(message = "Phone number is required")
-    @Pattern(regexp = "^[0-9]{10}$",
-             message = "Phone number must be 10 digits")
+	@Pattern(regexp = "^\\d{10}$", message = "Phone number must be 10 digits")
 	private String phone;
 
 	public User toUser() {
@@ -49,7 +47,7 @@ public class UserDTO {
 		List<Address> addressList = address.stream().map(a ->
 
 		Address.builder().blockNo(a.getBlockNo()).building(a.getBuilding()).landmark(a.getLandmark()).city(a.getCity())
-				.pin(a.getPin()).user(user).build()).collect(Collectors.toList());
+				.pin(a.getPin()).user(user).build()).toList();
 
 		user.setAddress(addressList);
 

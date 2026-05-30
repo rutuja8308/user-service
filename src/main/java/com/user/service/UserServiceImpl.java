@@ -1,11 +1,11 @@
 package com.user.service;
 
-import com.user.exception.GlobalExceptionHandler;
 import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import com.user.dto.UserDTO;
 import com.user.entity.User;
 import com.user.exception.ResourceNotFoundException;
@@ -14,11 +14,14 @@ import com.user.repository.UserRepository;
 @Service
 public class UserServiceImpl implements UserService 
 {
+	private static final Logger log = LoggerFactory.getLogger(UserServiceImpl.class);
 	
-private static final Logger log = LoggerFactory.getLogger(UserServiceImpl.class);
-	
-	@Autowired
 	private UserRepository userRepository;
+
+	public UserServiceImpl(UserRepository userRepository) {
+		super();
+		this.userRepository = userRepository;
+	}
 
 	@Override
 	public User saveUser(UserDTO user) 
@@ -36,9 +39,7 @@ private static final Logger log = LoggerFactory.getLogger(UserServiceImpl.class)
 	public User searchUser(String id) 
 	{
 		log.info("User found in UserServiceImpl {}", id);
-		//return userRepository.findById(id)
 			return userRepository.findByIsDeletedFalse();
-				//.orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + id));
 	}
 
 	@Override
@@ -53,7 +54,6 @@ private static final Logger log = LoggerFactory.getLogger(UserServiceImpl.class)
 		 
 		 userRepository.save(user);
 		 
-		// userRepository.deleteById(id);
 		 log.info("User deleted successfully UserServiceImpl {}", id);
 		 return "Deleted Successfully";
 	}

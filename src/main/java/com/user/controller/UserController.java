@@ -3,7 +3,6 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.user.dto.UserDTO;
 import com.user.entity.User;
 import com.user.service.UserService;
-import com.user.validationMessages.ValidationMessages;
+import com.user.validationmessages.ValidationMessages;
 
 import jakarta.validation.Valid;
 
@@ -25,11 +24,16 @@ import jakarta.validation.Valid;
 @RequestMapping("/users")
 public class UserController 
 {   
-	private static final Logger log = LoggerFactory.getLogger(UserService.class);
+	private static final Logger log = LoggerFactory.getLogger(UserController.class);
 	
-	@Autowired
 	private UserService userService;
 	
+	public UserController(UserService userService, String name) {
+		super();
+		this.userService = userService;
+		this.name = name;
+	}
+
 	@Value("${my.name}")
 	private String name;
 	

@@ -18,13 +18,12 @@ public class GlobalExceptionHandler {
 
         ex.getBindingResult()
           .getFieldErrors()
-          .forEach(error -> {
+          .forEach(error -> 
 
               errors.put(
                       error.getField(),
-                      error.getDefaultMessage()
+                      error.getDefaultMessage())
               );
-          });
 
         return errors;
     }
