@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.user.dto.UserDTO;
+import com.user.dto.UserResponseDto;
 import com.user.entity.User;
 import com.user.service.UserService;
 import com.user.validationmessages.ValidationMessages;
@@ -56,6 +57,12 @@ public class UserController
     	log.info("Search User method UserController {}", id);
 		return userService.searchUser(id); 
 	}
+    
+    @GetMapping("/searchcache/{id}")
+    public UserResponseDto searchUserCache(@PathVariable String id)
+    {
+        return userService.searchUserId(id);
+    }
     
     // create product // search product // update
     

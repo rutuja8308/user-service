@@ -1,15 +1,19 @@
 package com.user.entity;
 
+import java.io.Serializable;
 import java.util.List;
+import java.util.Set;
 
 import org.hibernate.annotations.UuidGenerator;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
@@ -28,8 +32,10 @@ import lombok.ToString;
 @NoArgsConstructor
 @Builder
 @Table(name = "users")
-public class User 
+public class User implements Serializable
 {
+    private static final long serialVersionUID = 1L;
+	
 	@Id
 	@UuidGenerator
 	private String id;
@@ -52,8 +58,13 @@ public class User
 	@Pattern(regexp = "^\\d{10}$", message = "Phone number must be 10 digits")
 	private String phone;
 	
-	@Enumerated(EnumType.STRING)
-	private Role role;
+	@ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "user_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    private Set<Role> roles;
 	
 	@Column(name = "is_deleted")
     private Boolean isDeleted = false;

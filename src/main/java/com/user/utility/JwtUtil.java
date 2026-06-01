@@ -2,6 +2,7 @@ package com.user.utility;
 
 import java.security.Key;
 import java.util.Date;
+import java.util.List;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
@@ -21,22 +22,22 @@ public class JwtUtil {
         return Keys.hmacShaKeyFor(secret.getBytes());
     }
 
-	public String generateToken(UserDetails userDetails) {
+	public String generateToken(UserDetails userDetails)
+	{
+	    Date now = new Date();
 
-		String role = userDetails.getAuthorities()
-		        .stream()
-		        .map(GrantedAuthority::getAuthority)
-		        .findFirst()
-		        .orElseThrow(() -> new RuntimeException("No role assigned to user"));
+	    List<String> roles = userDetails.getAuthorities()
+	            .stream()
+	            .map(GrantedAuthority::getAuthority)
+	            .toList();
 
-		Date now = new Date();
-		return Jwts.builder()
-		        .subject(userDetails.getUsername())
-		        .claim("role", role)
-		        .issuedAt(now)
-		        .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60))
-		        .signWith(getSigningKey())
-		        .compact();
+	    return Jwts.builder()
+	            .subject(userDetails.getUsername())
+	            .claim("roles", roles)   // ✅ FIXED (plural + list)
+	            .issuedAt(now)
+	            .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60))
+	            .signWith(getSigningKey())
+	            .compact();
 	}
 
 	public String extractUsername(String token) {

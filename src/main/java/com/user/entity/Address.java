@@ -12,6 +12,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import java.io.Serializable;
+
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.annotations.UuidGenerator;
 import org.hibernate.type.SqlTypes;
@@ -21,8 +23,10 @@ import org.hibernate.type.SqlTypes;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Address 
+public class Address implements Serializable
 {
+	private static final long serialVersionUID = 1L;
+	
 	@Id
 	@UuidGenerator
 	@JdbcTypeCode(SqlTypes.VARCHAR)

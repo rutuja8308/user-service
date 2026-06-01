@@ -3,6 +3,7 @@ package com.user.service;
 import java.util.List;
 
 import com.user.dto.UserDTO;
+import com.user.dto.UserResponseDto;
 import com.user.entity.User;
 
 public interface UserService 
@@ -12,5 +13,7 @@ public interface UserService
 	List<User> findAllUser();
 	User updateUser(UserDTO user, String id);
 	String deleteUser(String id);
+	
+	UserResponseDto searchUserId(String id);
 	
 }

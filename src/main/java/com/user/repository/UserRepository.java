@@ -10,7 +10,7 @@ import com.user.entity.User;
 
 public interface UserRepository extends JpaRepository<User, String> {
 
-	User findByIsDeletedFalse();
+	User findByIdAndIsDeletedFalse(String id);
 	
     Optional<User> findByUsername(String username);
 

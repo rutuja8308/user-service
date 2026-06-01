@@ -1,15 +1,13 @@
 package com.user.dto;
 
 import java.util.List;
-
-import com.user.entity.Address;
-import com.user.entity.Role;
-import com.user.entity.User;
+import java.util.Set;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,39 +18,27 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserDTO {
-	@NotBlank(message = "Block number is required")
-	private String name;
-	
-	@Email(message = "Invalid Email")
+
+    @NotBlank(message = "Name is required")
+    private String name;
+
+    private String username;
+
+    @Email(message = "Invalid Email")
     @NotBlank(message = "Email is required")
-	private String emailId;
-	
-	@NotBlank(message = "Password is required")
-	private String password;
-	
-	private String username;
-	
-	private String role;
-	
-	@Valid
-	private List<AddressDTO> address;
-	
-	@NotBlank(message = "Phone number is required")
-	@Pattern(regexp = "^\\d{10}$", message = "Phone number must be 10 digits")
-	private String phone;
+    private String emailId;
 
-	public User toUser() {
-		User user = User.builder().name(name).username(username).role(Role.valueOf(role.toUpperCase())).email(emailId).password(password).phone(phone).isDeleted(Boolean.FALSE).build();
+    @NotBlank(message = "Password is required")
+    private String password;
 
-		List<Address> addressList = address.stream().map(a ->
+    @NotBlank(message = "Phone number is required")
+    @Pattern(regexp = "^\\d{10}$", message = "Phone number must be 10 digits")
+    private String phone;
 
-		Address.builder().blockNo(a.getBlockNo()).building(a.getBuilding()).landmark(a.getLandmark()).city(a.getCity())
-				.pin(a.getPin()).user(user).build()).toList();
+    // roles as STRING list (IMPORTANT)
+    private Set<String> roles;
 
-		user.setAddress(addressList);
-
-		return user;
-
-	}
-
+    // address input only
+    @Valid
+    private List<AddressDTO> address;
 }
